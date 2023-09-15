@@ -1,5 +1,7 @@
 #![allow(unused)] // For beginning only.
 
+use crate::model::ModelController;
+
 pub use self::error::{Error, Result};
 
 use std::net::SocketAddr;
@@ -16,10 +18,13 @@ use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
 
 mod error;
+mod model;
 mod web;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<()> {
+    // Initialize ModelController.
+    let mc = ModelController::new().await?;
     // let routes_hello = Router::new()
     //     .route(
     //         "/hello",
@@ -30,6 +35,7 @@ async fn main() {
     let routes_all = Router::new()
         .merge(routes_hello())
         .merge(web::routes_login::routes())
+        .nest("/api", web::routes_tickets::routes(mc))
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
@@ -43,6 +49,8 @@ async fn main() {
         .await
         .unwrap();
     // endregion:  --- Start Server
+
+    Ok(())
 }
 
 async fn main_response_mapper(res: Response) -> Response {
