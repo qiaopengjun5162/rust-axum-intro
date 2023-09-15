@@ -8,17 +8,18 @@ async fn quick_dev() -> Result<()> {
     let hc = httpc_test::new_client("http://localhost:8080")?;
 
     hc.do_get("/hello?name=Qiao").await?.print().await?;
-    hc.do_get("/hello2/Mike").await?.print().await?;
+    // hc.do_get("/hello2/Mike").await?.print().await?;
     // hc.do_get("/src/main.rs").await?.print().await?;
 
     let req_login = hc.do_post(
         "/api/login",
         json!({
-            "username": "demo11",
+            "username": "demo1",
             "pwd": "welcome"
         }),
     );
-    let resp_login = req_login.await?.print().await?;
+    req_login.await?.print().await?;
+    hc.do_get("/hello2/Mike").await?.print().await?;
 
     Ok(())
 }
