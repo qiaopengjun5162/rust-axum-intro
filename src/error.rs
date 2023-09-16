@@ -9,6 +9,10 @@ pub type Result<T> = core::result::Result<T, Error>;
 pub enum Error {
     LoginFail,
 
+    // -- Auth errors.
+    AuthFailNoAuthTokenCookie,
+    AuthFailTokenWrongFormat,
+
     // -- Model errors.
     TicketDeleteFailIdNotFound { id: u64 },
     TicketGetFailIdNotFound { id: u64 },

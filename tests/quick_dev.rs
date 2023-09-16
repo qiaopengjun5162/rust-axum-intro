@@ -18,7 +18,7 @@ async fn quick_dev() -> Result<()> {
             "pwd": "welcome"
         }),
     );
-    // req_login.await?.print().await?;
+    req_login.await?.print().await?;
     // hc.do_get("/hello2/Mike").await?.print().await?;
 
     let req_create_ticket = hc.do_post(

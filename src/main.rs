@@ -1,6 +1,6 @@
 #![allow(unused)] // For beginning only.
 
-use crate::model::ModelController;
+use crate::{model::ModelController, web::mw_auth::mw_require_auth};
 
 pub use self::error::{Error, Result};
 
@@ -32,10 +32,14 @@ async fn main() -> Result<()> {
     //     )
     //     .route("/hello2/:name", get(handler_hello2));
 
+    let routes_apis =
+        web::routes_tickets::routes(mc.clone()).route_layer(middleware::from_fn(mw_require_auth));
+
     let routes_all = Router::new()
         .merge(routes_hello())
         .merge(web::routes_login::routes())
-        .nest("/api", web::routes_tickets::routes(mc))
+        // .nest("/api", web::routes_tickets::routes(mc))
+        .nest("/api", routes_apis)
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
