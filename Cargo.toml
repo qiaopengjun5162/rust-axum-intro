@@ -19,6 +19,7 @@ lazy-regex = "3.0.2"
 async-trait = "0.1.73"
 strum_macros = "0.25.2"
 uuid = { version = "1.4.1", features = ["v4", "fast-rng"] }
+serde_with = "3.3.0"
 
 [dev-dependencies]
 anyhow = "1.0.73"
